@@ -6,7 +6,7 @@
 /*   By: llejeune <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 16:12:53 by llejeune          #+#    #+#             */
-/*   Updated: 2018/12/14 14:58:34 by llejeune         ###   ########.fr       */
+/*   Updated: 2019/03/04 17:27:55 by llejeune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,11 @@ static int		sizeline(char *tmp)
 
 	i = 0;
 	size = 0;
-	while (tmp[i++] != '\n')
+	while (tmp[i] != '\n' && tmp[i] != '\0')
+	{
+		i++;
 		size++;
+	}
 	return (size);
 }
 
@@ -33,7 +36,10 @@ static int		line_no_eof(char **tmp, char **line)
 	else
 		*line = ft_strsub(*tmp, 0, sizeline(*tmp));
 	str = *tmp;
-	*tmp = ft_strdup(ft_strchr(str, '\n') + 1);
+	if (ft_strchr(str, '\n') != NULL)
+		*tmp = ft_strdup(ft_strchr(str, '\n') + 1);
+	else
+		*tmp = ft_strdup(str);
 	free(str);
 	return (1);
 }
@@ -51,7 +57,9 @@ static int		eof(char **tmp, char **line)
 	}
 	if (ft_strchr(*tmp, '\n') == NULL)
 	{
-		*line = ft_strdup(*tmp);
+		str = *tmp;
+		*line = ft_strdup(str);
+		free(str);
 		*tmp = ft_strnew(0);
 	}
 	else
